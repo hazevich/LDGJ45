@@ -1,12 +1,13 @@
-﻿using System;
-
-namespace LDGJ45
+﻿namespace LDGJ45
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var game = new Ldgj45Game())
+            {
+                game.Run();
+            }
         }
     }
 }
