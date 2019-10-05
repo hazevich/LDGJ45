@@ -2,7 +2,7 @@
 
 namespace LDGJ45.Core.World.Data
 {
-    public sealed class GameObjectData
+    public class GameObjectData
     {
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; } = Vector2.One;

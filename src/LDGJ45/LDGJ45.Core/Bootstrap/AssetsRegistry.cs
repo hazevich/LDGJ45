@@ -13,6 +13,7 @@ namespace LDGJ45.Core.Bootstrap
                     scanner.TheCallingAssembly();
 
                     scanner.AddAllTypesOf<IAssetReader>();
+                    scanner.AddAllTypesOf<IAssetWriter>();
                 }
             );
 

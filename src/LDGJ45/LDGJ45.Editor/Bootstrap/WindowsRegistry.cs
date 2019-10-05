@@ -1,4 +1,5 @@
-﻿using LDGJ45.Editor.UI;
+﻿using LDGJ45.Core.TileMaps;
+using LDGJ45.Editor.UI;
 using StructureMap;
 
 namespace LDGJ45.Editor.Bootstrap
@@ -7,12 +8,9 @@ namespace LDGJ45.Editor.Bootstrap
     {
         public WindowsRegistry()
         {
-            Scan(
-                scanner =>
-                {
-                    scanner.TheCallingAssembly();
-                    scanner.AddAllTypesOf<IWindow>();
-                });
+            ForConcreteType<TilePaletteWindow>().Configure.Singleton();
+
+            Forward<TilePaletteWindow, IWindow>();
         }
     }
 }

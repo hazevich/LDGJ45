@@ -12,12 +12,14 @@ namespace LDGJ45.Core.World
         private readonly IPublisher _publisher;
         private bool _disposed;
 
-        public GameObject(IPublisher publisher)
+        public GameObject(IPublisher publisher, GameObjectType gameObjectType)
         {
             _publisher = publisher;
+            GameObjectType = gameObjectType;
         }
 
         public Transform2D Transform { get; } = new Transform2D();
+        public GameObjectType GameObjectType { get; }
 
         public void Dispose()
         {

@@ -8,13 +8,15 @@ namespace LDGJ45.Core.World
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private bool _disposed;
 
+        public IReadOnlyList<GameObject> GameObjects => _gameObjects;
+
         public void Dispose()
         {
             if (_disposed) return;
 
-            for (var i = 0; i < _gameObjects.Count; i++)
+            for (var i = 0; i < GameObjects.Count; i++)
             {
-                var gameObject = _gameObjects[i];
+                var gameObject = GameObjects[i];
 
                 gameObject.Dispose();
                 RemoveGameObject(gameObject);

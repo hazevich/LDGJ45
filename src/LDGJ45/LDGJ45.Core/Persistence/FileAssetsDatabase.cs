@@ -8,7 +8,10 @@ namespace LDGJ45.Core.Persistence
     public sealed class FileAssetsDatabase : IAssetsDatabase
     {
         private readonly Dictionary<Type, IAssetReader> _assetReaders;
+        private readonly Dictionary<Type, IAssetWriter> _assetWriters;
+        
         private readonly Dictionary<AssetId, object> _cachedAssets = new Dictionary<AssetId, object>();
+        
         private readonly ISerializer _serializer;
 
         private readonly Settings _settings;
@@ -16,13 +19,15 @@ namespace LDGJ45.Core.Persistence
         public FileAssetsDatabase(
             Settings settings,
             ISerializer serializer,
-            IEnumerable<IAssetReader> assetReaders
+            IEnumerable<IAssetReader> assetReaders,
+            IEnumerable<IAssetWriter> assetWriters
         )
         {
             _settings = settings;
             _serializer = serializer;
 
             _assetReaders = assetReaders.ToDictionary(ar => ar.AssetType);
+            _assetWriters = assetWriters.ToDictionary(ar => ar.AssetType);
         }
 
         public T Load<T>(AssetId assetId, bool cached = true)
@@ -42,9 +47,22 @@ namespace LDGJ45.Core.Persistence
             return asset;
         }
 
-        private string ConstructPath(AssetId assetId)
+        public void Store<T>(T asset, AssetId assetId)
         {
-            return Path.Combine(_settings.AssetsBaseFolder, assetId);
+            var assetType = asset.GetType();
+
+            if (!_assetWriters.TryGetValue(assetType, out var assetWriter))
+            {
+                throw new AssetWriterNotFoundException(assetType);
+            }
+
+            var assetPath = ConstructPath(assetId);
+
+            assetWriter.Write(assetPath, asset, _serializer);
+
+            _cachedAssets[assetId] = asset;
         }
+
+        private string ConstructPath(AssetId assetId) => Path.Combine(_settings.AssetsBaseFolder, assetId);
     }
 }

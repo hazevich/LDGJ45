@@ -43,6 +43,8 @@ namespace LDGJ45.Editor
         {
             for (var i = 0; i < _gameSystems.Count; i++)
                 _gameSystems[i].Update(gameTime);
+
+            _editorApp.Update();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -54,6 +56,12 @@ namespace LDGJ45.Editor
         private Container ConfigureContainer()
         {
             var registry = new Registry();
+            registry.For<GameWindow>().Use(Window);
+            registry.For(typeof(IReadOnlyList<>)).Use(typeof(List<>));
+            
+            registry.ForConcreteType<InputSystem>().Configure.Singleton();
+            registry.Forward<InputSystem, IGameSystem>();
+            
             registry.IncludeRegistry(new GraphicsRegistry(GraphicsDevice));
             registry.IncludeRegistry<SystemsRegistry>();
             registry.IncludeRegistry<GameObjectComponentsFactoriesRegistry>();
@@ -61,10 +69,8 @@ namespace LDGJ45.Editor
             registry.IncludeRegistry<SettingsRegistry>();
             registry.IncludeRegistry<AssetsRegistry>();
             registry.IncludeRegistry<WindowsRegistry>();
-
-            registry.For<GameWindow>().Use(Window);
-            registry.For(typeof(IReadOnlyList<>)).Use(typeof(List<>));
-
+            registry.IncludeRegistry<TilesRegistry>();
+            
             return new Container(registry);
         }
     }

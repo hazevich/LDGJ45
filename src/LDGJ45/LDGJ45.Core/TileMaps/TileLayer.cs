@@ -12,6 +12,7 @@ namespace LDGJ45.Core.TileMaps
         public TileLayer(int index, TileConfiguration tileConfiguration)
         {
             Index = index;
+            TileConfiguration = tileConfiguration;
 
             _tiles = new Grid<T>(
                 tileConfiguration.MapWidth,
@@ -22,6 +23,7 @@ namespace LDGJ45.Core.TileMaps
         }
 
         public int Index { get; }
+        public TileConfiguration TileConfiguration { get; }
 
         public bool IsVisible { get; set; } = true;
 
