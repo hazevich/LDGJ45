@@ -24,6 +24,10 @@
     <PackageReference Include="structuremap" Version="4.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TileMaps\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="dotnet user-secrets set &quot;AssetsBaseFolder&quot; $(SolutionDir)..\..\Assets --project $(ProjectDir)" />
   </Target>

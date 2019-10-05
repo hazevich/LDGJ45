@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using LDGJ45.Utils;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LDGJ45.Graphics
 {
@@ -11,19 +12,7 @@ namespace LDGJ45.Graphics
 
         public Sprite Sprite { get; }
 
-        public override void Render(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(
-                Sprite.TextureRegion.Texture,
-                Transform.Position,
-                Sprite.TextureRegion.Region,
-                Sprite.Color,
-                Transform.Rotation,
-                Sprite.Origin,
-                Transform.Scale,
-                Transform.FlipX ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                0
-            );
-        }
+        public override void Render(SpriteBatch spriteBatch) => 
+            spriteBatch.Render(Sprite, Transform);
     }
 }

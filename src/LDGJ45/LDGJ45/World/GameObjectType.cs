@@ -2,6 +2,7 @@
 {
     public enum GameObjectType
     {
-        Hero = 0
+        Hero = 0,
+        TileMap = 1
     }
 }
