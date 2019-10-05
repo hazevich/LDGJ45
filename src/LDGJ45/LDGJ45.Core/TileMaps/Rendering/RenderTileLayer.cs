@@ -61,7 +61,10 @@ namespace LDGJ45.Core.TileMaps.Rendering
                 tile.Row * _tileConfiguration.TileHeight
             );
 
-            var sprite = new Sprite(new TextureRegion2D(tile.Texture, tile.Region));
+            var sprite = new Sprite(new TextureRegion2D(tile.Texture, tile.Region))
+            {
+                Origin = Vector2.Zero
+            };
             var renderTile = new RenderTile(tile, sprite, vectorPosition);
             _renderTiles.Add(renderTile);
         }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Drawing;
-using System.Numerics;
 using ImGuiNET;
 using LDGJ45.Core.Messaging;
 using LDGJ45.Core.Persistence;
 using LDGJ45.Core.TileMaps;
 using LDGJ45.Core.World.Messages;
 using Microsoft.Xna.Framework.Graphics;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
@@ -35,12 +33,14 @@ namespace LDGJ45.Editor.UI
         public Texture2D TilesetTexture => _tilesetTexture;
         public ref RectangleF SelectedRegion => ref _selectedRegion;
 
+        public TileMap Map => _tileMap;
+
         public void Render()
         {
             if (!ImGui.Begin("Tile palette"))
                 return;
 
-            if (_tileMap == null)
+            if (Map == null)
             {
                 ImGui.Text("Please add tilemap");
                 return;
@@ -49,7 +49,7 @@ namespace LDGJ45.Editor.UI
             if (ImGui.CollapsingHeader("Tile layers"))
             {
                 ImGui.PushID(-1);
-                var collisionLayer = _tileMap.CollisionLayer;
+                var collisionLayer = Map.CollisionLayer;
                 var collisionLayerVisible = collisionLayer.IsVisible;
 
                 if (ImGui.Checkbox("", ref collisionLayerVisible))
@@ -62,10 +62,10 @@ namespace LDGJ45.Editor.UI
                 ImGui.Text("Collision layer");
 
 
-                for (var i = 0; i < _tileMap.TileLayers.Count; i++)
+                for (var i = 0; i < Map.TileLayers.Count; i++)
                 {
                     uint color;
-                    if (SelectedTileLayer == _tileMap.TileLayers[i])
+                    if (SelectedTileLayer == Map.TileLayers[i])
                     {
                         color = ImGui.GetColorU32(new Vector4(0, 255, 255, 1));
                     }
@@ -74,7 +74,7 @@ namespace LDGJ45.Editor.UI
                         color = ImGui.GetColorU32(new Vector4(192, 192, 192, 1));
                     }
                     
-                    var tileLayer = _tileMap.TileLayers[i];
+                    var tileLayer = Map.TileLayers[i];
                     var visible = tileLayer.IsVisible;
                     ImGui.PushID(i);
                     if (ImGui.Checkbox("", ref visible))
@@ -90,7 +90,7 @@ namespace LDGJ45.Editor.UI
                     ImGui.PushID(i);
                     if (ImGui.Button("X"))
                     {
-                        _tileMap.RemoveTileLayer(tileLayer.Index);
+                        Map.RemoveTileLayer(tileLayer.Index);
                     }
 
                     ImGui.PopStyleColor();
@@ -105,7 +105,7 @@ namespace LDGJ45.Editor.UI
 
                 ImGui.NewLine();
                 if (ImGui.Button("+"))
-                    SelectedTileLayer = _tileMap.CreateNewTileLayer();
+                    SelectedTileLayer = Map.CreateNewTileLayer();
             }
 
             if (ImGui.CollapsingHeader("Tileset"))
@@ -120,8 +120,8 @@ namespace LDGJ45.Editor.UI
                             _selectedRegion = new RectangleF(
                                 0,
                                 0,
-                                _tileMap.TileConfiguration.TileWidth,
-                                _tileMap.TileConfiguration.TileHeight
+                                Map.TileConfiguration.TileWidth,
+                                Map.TileConfiguration.TileHeight
                             );
                         }
                     }
@@ -139,35 +139,14 @@ namespace LDGJ45.Editor.UI
                     if (ImGui.IsItemHovered())
                     {
                         var cellSize = new Vector2(
-                            _tileMap.TileConfiguration.TileWidth,
-                            _tileMap.TileConfiguration.TileHeight
+                            Map.TileConfiguration.TileWidth,
+                            Map.TileConfiguration.TileHeight
                         );
 
                         if (ImGui.IsMouseClicked(0) && SelectedRegion != RectangleF.Empty)
                         {
                             var leftTop = Snap(ImGui.GetIO().MouseClickedPos[0] - currentPos, cellSize);
-;
-                            _selectedRegion.Location = new PointF(leftTop.X, leftTop.Y);
-
-                            var rightBottom = Snap(new Vector2(SelectedRegion.Right, SelectedRegion.Bottom), cellSize);
-                            var sizeVector = rightBottom - leftTop;
-
-                            _selectedRegion.Size = new SizeF(sizeVector.X, sizeVector.Y);
-                        }
-
-                        if (ImGui.IsMouseDragging(0))
-                        {
-                            var startPos = ImGui.GetIO().MouseClickedPos[0] - currentPos;
-                            var endPos = ImGui.GetMousePos() - currentPos;
-                            var min = Snap(Vector2.Min(startPos, endPos), cellSize);
-                            var max = Snap(Vector2.Max(startPos, endPos), cellSize);
-
-                            _selectedRegion = RectangleF.FromLTRB(
-                                min.X,
-                                min.Y,
-                                max.X,
-                                max.Y
-                            );
+                            _selectedRegion = new RectangleF(leftTop.X, leftTop.Y, cellSize.X, cellSize.Y);
                         }
                     }
 
@@ -178,8 +157,6 @@ namespace LDGJ45.Editor.UI
                         ImGui.GetColorU32(Vector4.One)
                     );
                 }
-
-                
             }
 
             ImGui.End();

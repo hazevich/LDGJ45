@@ -4,6 +4,7 @@ using ImGuiNET;
 using LDGJ45.Core.GameSystems;
 using LDGJ45.Core.Persistence;
 using LDGJ45.Core.World;
+using LDGJ45.Core.World.Data;
 using LDGJ45.Editor.UI.States;
 using Microsoft.Xna.Framework;
 using Vector2 = System.Numerics.Vector2;
@@ -108,7 +109,7 @@ namespace LDGJ45.Editor.UI
             ImGui.EndMenu();
         }
 
-        private string _saveFileName = string.Empty;
+        private string _fileName = string.Empty;
 
         private void RenderFileMenu()
         {
@@ -117,6 +118,7 @@ namespace LDGJ45.Editor.UI
             if (ImGui.BeginMenu("File"))
             {
                 if (ImGui.Selectable("Save")) openPopup = "SaveWorldPopup";
+                if (ImGui.Selectable("Open")) openPopup = "OpenWorldPopup";
 
                 ImGui.EndMenu();
             }
@@ -127,11 +129,26 @@ namespace LDGJ45.Editor.UI
             {
                 var data = _worldSystem.GetWorldData();
 
-                ImGui.InputText("Path", ref _saveFileName, 4096);
+                ImGui.InputText("Path", ref _fileName, 4096);
                 if (ImGui.Button("Select"))
                 {
-                    _assetsDatabase.Store(data, _saveFileName);
-                    _saveFileName = "";
+                    _assetsDatabase.Store(data, _fileName);
+                    _fileName = "";
+                    ImGui.CloseCurrentPopup();
+                }
+
+                ImGui.EndPopup();
+            }
+
+            if (ImGui.BeginPopup("OpenWorldPopup"))
+            {
+
+                ImGui.InputText("Path", ref _fileName, 4096);
+                if (ImGui.Button("Select"))
+                {
+                    var data = _assetsDatabase.Load<WorldData>(_fileName);
+                    _worldSystem.LoadWorld(data);
+                    _fileName = "";
                     ImGui.CloseCurrentPopup();
                 }
 

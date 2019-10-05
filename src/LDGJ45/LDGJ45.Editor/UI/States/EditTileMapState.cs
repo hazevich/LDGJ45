@@ -56,6 +56,7 @@ namespace LDGJ45.Editor.UI.States
                         )
                     )
                 );
+                _tilePalette.Map.AddCollision((int) tilePosition.Y, (int) tilePosition.X);
             }
 
             _renderer.Camera.Transform.Position -= _inputSystem.DragDelta;
