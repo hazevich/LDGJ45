@@ -26,6 +26,19 @@ namespace LDGJ45.Core.GameSystems
             return gameObject;
         }
 
+        public GameObject CreateGameObject(GameObjectType gameObjectType)
+        {
+            var gameObject = new GameObject(_publisher);
+            _world.AddGameObject(gameObject);
+
+            var components = _componentsFactory.GetComponents(gameObjectType);
+
+            foreach (var component in components)
+                gameObject.AddComponent(component);
+
+            return gameObject;
+        }
+
         public void CreateNewWorld()
         {
             _world?.Dispose();
@@ -39,11 +52,7 @@ namespace LDGJ45.Core.GameSystems
 
             foreach (var gameObjectData in worldData.GameObjects)
             {
-                var gameObject = CreateGameObject();
-                var components = _componentsFactory.GetComponents(gameObjectData.GameObjectType);
-
-                foreach (var component in components)
-                    gameObject.AddComponent(component);
+                CreateGameObject(gameObjectData.GameObjectType);
             }
         }
     }

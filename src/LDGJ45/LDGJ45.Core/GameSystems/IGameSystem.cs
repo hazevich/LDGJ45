@@ -1,7 +1,9 @@
-﻿namespace LDGJ45.Core.GameSystems
+﻿using Microsoft.Xna.Framework;
+
+namespace LDGJ45.Core.GameSystems
 {
     public interface IGameSystem
     {
-        void Update();
+        void Update(GameTime gameTime);
     }
 }

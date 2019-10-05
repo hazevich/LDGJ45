@@ -6,7 +6,8 @@ namespace LDGJ45.Editor
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var game = new EditorGame())
+                game.Run();
         }
     }
 }

@@ -16,6 +16,11 @@ namespace LDGJ45.Core.Gameplay
             else if (keyboard.IsKeyDown(Keys.D))
                 position.X += 10;
 
+            if (keyboard.IsKeyDown(Keys.W))
+                position.Y -= 10;
+            else if (keyboard.IsKeyDown(Keys.S))
+                position.Y += 10;
+
             Transform.Position = position;
         }
     }

@@ -2,6 +2,7 @@
 using LDGJ45.Core.GameSystems;
 using LDGJ45.Core.Messaging;
 using LDGJ45.Core.World.Messages;
+using Microsoft.Xna.Framework;
 
 namespace LDGJ45.Core.World
 {
@@ -17,7 +18,7 @@ namespace LDGJ45.Core.World
             subscriber.Subscribe<ComponentRemovedMessage>(Handle);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             AddComponents();
             RemoveComponents();
