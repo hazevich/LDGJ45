@@ -3,7 +3,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <UserSecretsId>$(AssemblyName)</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,11 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TileMaps\" />
+    <ProjectReference Include="..\LDGJ45.Core\LDGJ45.Core.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet user-secrets set &quot;AssetsBaseFolder&quot; $(SolutionDir)..\..\Assets --project $(ProjectDir)" />
-  </Target>
 
 </Project>

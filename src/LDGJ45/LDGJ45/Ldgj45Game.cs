@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using LDGJ45.Bootstrap;
-using LDGJ45.GameSystems;
-using LDGJ45.Graphics;
-using LDGJ45.World.Data;
+using LDGJ45.Core.Bootstrap;
+using LDGJ45.Core.GameSystems;
+using LDGJ45.Core.Graphics;
+using LDGJ45.Core.World.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StructureMap;
